@@ -1,8 +1,8 @@
-package cxz.javatool.math;
+package apex.javatool.math;
 
 import java.util.List;
 
-import cxz.javatool.data.structure.Pair;
+import apex.javatool.data.structure.Pair;
 
 import java.util.Collections;
 import java.util.Comparator;

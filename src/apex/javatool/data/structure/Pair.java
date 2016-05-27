@@ -1,4 +1,4 @@
-package cxz.javatool.data.structure;
+package apex.javatool.data.structure;
 
 import java.util.HashSet;
 

@@ -1,4 +1,4 @@
-package cxz.javatool.io;
+package apex.javatool.io;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

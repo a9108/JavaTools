@@ -1,6 +1,8 @@
-package cxz.javatool.platform.config;
+package apex.javatool.platform.config;
 
 import java.util.*;
+
+import apex.javatool.io.FileOps;
 
 public class Config {
 	public static Map<String, String> config = new HashMap<String, String>();

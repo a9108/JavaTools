@@ -1,9 +1,9 @@
-package cxz.javatool.math;
+package apex.javatool.math;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import basic.format.Pair;
+import apex.javatool.data.structure.Pair;
 
 public class RandomOps {
 	private static Random random = new Random();

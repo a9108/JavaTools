@@ -68,9 +68,19 @@ public class LibSVM extends Classifier {
 		SystemCall.execute(SVMDir + "svm-scale -r " + scaleFile + " " + testFile, testScaleFile);
 		SystemCall.execute(SVMDir + "svm-predict -b 1 " + testScaleFile + " " + modelFile + " " + predFile);
 		ArrayList<Double> res = new ArrayList<Double>();
+		int off = -1;
 		for (String t : FileOps.LoadFilebyLine(predFile))
 			try {
-				res.add(Double.valueOf(t.split(" ")[1]));
+				if (off == -1) {
+					String[] sep = t.split(" ");
+					for (int i = 0; i < sep.length; i++)
+						try {
+							if (Integer.valueOf(sep[i]) == 1)
+								off = i;
+						} catch (Exception e) {
+						}
+				} else
+					res.add(Double.valueOf(t.split(" ")[off]));
 			} catch (Exception e) {
 			}
 		FileOps.remove(testFile);

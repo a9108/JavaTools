@@ -8,7 +8,7 @@ import apex.javatool.data.structure.Feature;
 import apex.javatool.data.structure.Tuple;
 
 public abstract class Classifier {
-	protected LinkedList<Tuple<Integer, Feature>> train = new LinkedList<Tuple<Integer, Feature>>();
+	protected ArrayList<Tuple<Integer, Feature>> train = new ArrayList<Tuple<Integer, Feature>>();
 	protected int NFeature;
 
 	public int getNFeature() {
@@ -28,6 +28,29 @@ public abstract class Classifier {
 	public abstract void train();
 
 	public abstract double predict(Feature data);
+
+	public void validate() {
+		LinkedList<Feature> trainFeatures = new LinkedList<Feature>();
+		for (Tuple<Integer, Feature> cur : train)
+			trainFeatures.add(cur.getSecond());
+		ArrayList<Double> pred = predict(trainFeatures);
+		int hit = 0;
+		double loss = 0;
+		for (int i = 0; i < pred.size(); i++) {
+			int truth = train.get(i).getFirst();
+			double p = pred.get(i);
+			int res = 0;
+			if (p >= 0.5)
+				res = 1;
+			if (res == truth)
+				hit++;
+			if (truth == 1)
+				loss -= Math.log(p);
+			else
+				loss -= Math.log(1 - p);
+		}
+		System.out.println("Precison = " + hit / (0.0 + train.size()) + " , LogLoss = " + loss / train.size());
+	}
 
 	public abstract void destroy();
 

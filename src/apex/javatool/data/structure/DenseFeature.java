@@ -7,6 +7,10 @@ public class DenseFeature extends Feature {
 	private double result;
 	private HashSet<Integer> ids;
 
+	public DenseFeature(int n) {
+		setSize(n);
+	}
+
 	public void setSize(int n) {
 		value = new double[n];
 		ids = new HashSet<Integer>();

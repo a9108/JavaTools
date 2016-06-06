@@ -43,15 +43,19 @@ public class RandomOps {
 		return l;
 	}
 
-	public static boolean getBoolean(double ratio) {
+	public static boolean genBoolean(double ratio) {
 		return random.nextDouble() < ratio;
 	}
 
-	public static double getDouble() {
+	public static double genDouble() {
 		return random.nextDouble();
 	}
 
-	public static int getInt(int size) {
+	public static int genInt(int size) {
 		return random.nextInt(size);
+	}
+
+	public static double genDouble(double l, double r) {
+		return l + (r - l) * genDouble();
 	}
 }

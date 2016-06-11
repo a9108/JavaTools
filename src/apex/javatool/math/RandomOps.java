@@ -58,4 +58,8 @@ public class RandomOps {
 	public static double genDouble(double l, double r) {
 		return l + (r - l) * genDouble();
 	}
+
+	public static Random getRandom() {
+		return random;
+	}
 }

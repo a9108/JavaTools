@@ -40,7 +40,7 @@ public class Network extends Describable {
         return name.get(i);
     }
 
-    public void order() {
+    public HashMap<Integer, Integer> order() {
         HashMap<Integer, Integer> rid = new HashMap<>();
         HashMap<Integer, HashSet<Integer>> nlinks = new HashMap<>();
         for (int id : getNodes()) {
@@ -55,6 +55,7 @@ public class Network extends Describable {
         for (int i : name.keySet())
             nname.put(rid.get(i), name.get(i));
         name = nname;
+        return rid;
     }
 
     public void setNodeName(int i, String name) {

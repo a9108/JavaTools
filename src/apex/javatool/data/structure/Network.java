@@ -161,12 +161,12 @@ public class Network extends Describable {
         }
     }
 
-    public void saveLEDA(String filename) {
+    public void saveLEDA(String filename, int type) {
         LinkedList<String> out = new LinkedList<>();
         out.add("LEDA.GRAPH");
         out.add("void");
         out.add("void");
-        out.add("-2");
+        if (type == 3) out.add("-2");
         out.add("" + getNodes().size());
         for (int i = 0; i < getNodes().size(); i++)
             out.add("|{" + (i + 1) + "}|");

@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 public class Network extends Describable {
 
     private HashMap<Integer, HashSet<Integer>> links = new HashMap<>();
-    private HashMap<Integer, String> name = new HashMap<>();
+    private HashMap<Integer, String> id2name = new HashMap<>();
+    private HashMap<String, Integer> name2id = new HashMap<>();
 
     public Network() {
     }
@@ -36,8 +37,13 @@ public class Network extends Describable {
     }
 
     public String getNodeName(int i) {
-        if (!name.containsKey(i)) return null;
-        return name.get(i);
+        if (!id2name.containsKey(i)) return null;
+        return id2name.get(i);
+    }
+
+    public int getNameID(String name) {
+        if (!name2id.containsKey(name)) return -1;
+        return name2id.get(name);
     }
 
     public HashMap<Integer, Integer> order() {
@@ -52,22 +58,36 @@ public class Network extends Describable {
                 nlinks.get(rid.get(i)).add(rid.get(j));
         links = nlinks;
         HashMap<Integer, String> nname = new HashMap<>();
-        for (int i : name.keySet())
-            nname.put(rid.get(i), name.get(i));
-        name = nname;
+        for (int i : id2name.keySet())
+            nname.put(rid.get(i), id2name.get(i));
+        id2name = nname;
         return rid;
     }
 
     public void setNodeName(int i, String name) {
-        this.name.put(i, name);
+        if (name2id.containsKey(name)) {
+            if (name2id.get(name) == i) return;
+            System.err.println("Duplicated Node Name, '" + name + "' assigned to node  " + name2id.get(name) + " and " + i);
+        }
+        try {
+            name2id.remove(id2name.get(i));
+        } catch (Exception ex) {
+        }
+        id2name.put(i, name);
+        name2id.put(name, i);
     }
 
     public void clear() {
         links.clear();
-        name.clear();
+        id2name.clear();
+        name2id.clear();
     }
 
-    public int size() {
+    public int size(){
+        return getNodes().size();
+    }
+
+    public int getEdgeCount() {
         int sum = 0;
         for (HashSet<Integer> cur : links.values())
             sum += cur.size();
@@ -146,7 +166,7 @@ public class Network extends Describable {
             for (int i = 0; i < cnt; i++) {
                 String cur = fin.readLine();
                 cur = cur.substring(2, cur.length() - 2);
-                name.put(i, cur);
+                setNodeName(i, cur);
             }
             int cntEdge = Integer.valueOf(fin.readLine());
             for (int i = 0; i < cntEdge; i++) {
@@ -170,7 +190,7 @@ public class Network extends Describable {
         out.add("" + getNodes().size());
         for (int i = 0; i < getNodes().size(); i++)
             out.add("|{" + (i + 1) + "}|");
-        out.add("" + size());
+        out.add("" + getEdgeCount());
         for (int i : getNodes())
             out.addAll(
                     getLinks(i).stream()

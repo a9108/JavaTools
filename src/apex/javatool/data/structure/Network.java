@@ -16,6 +16,7 @@ public class Network extends Describable {
     private HashMap<Integer, HashSet<Integer>> links = new HashMap<>();
     private HashMap<Integer, String> id2name = new HashMap<>();
     private HashMap<String, Integer> name2id = new HashMap<>();
+    private boolean altered = true;
 
     public Network() {
     }
@@ -83,7 +84,7 @@ public class Network extends Describable {
         name2id.clear();
     }
 
-    public int size(){
+    public int size() {
         return getNodes().size();
     }
 
@@ -100,11 +101,31 @@ public class Network extends Describable {
         return 0;
     }
 
+    private int maxDegree;
+
+    private void calcStats() {
+//        maxDegree
+        maxDegree = 0;
+        for (int i : links.keySet())
+            maxDegree = Math.max(maxDegree, getDegree(i));
+    }
+
+    public int maxDegree() {
+        if (altered) calcStats();
+        return maxDegree;
+    }
+
+    public HashMap<Integer,Integer> calcDistance(int source){
+        HashMap<Integer,Integer> res=new HashMap<>();
+
+        return res;
+    }
     public Set<Integer> getNodes() {
         return links.keySet();
     }
 
     public void insert(int i, int j) {
+        altered = true;
         if (!links.containsKey(i))
             links.put(i, new HashSet<>());
         links.get(i).add(j);
@@ -114,6 +135,7 @@ public class Network extends Describable {
     }
 
     public void remove(int i) {
+        altered = true;
         if (links.containsKey(i)) {
             for (Integer j : links.get(i))
                 links.get(j).remove(i);
@@ -122,6 +144,7 @@ public class Network extends Describable {
     }
 
     public void retainAll(Set<Integer> active) {
+        altered = true;
         for (int id : new HashSet<>(links.keySet())) {
             if (active.contains(id))
                 links.get(id).retainAll(active);

@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import apex.javatool.data.structure.DenseFeature;
 import apex.javatool.data.structure.Feature;
+import apex.javatool.data.structure.SparseFeature;
 import apex.javatool.data.structure.Tuple;
 
 public abstract class Classifier {
@@ -20,7 +22,7 @@ public abstract class Classifier {
 	}
 
 	public void addTrain(int label, Feature feature) {
-		train.add(new Tuple<Integer, Feature>(label, feature));
+		train.add(new Tuple<Integer, Feature>(label, new SparseFeature(feature)));
 	}
 
 	public abstract void clear();

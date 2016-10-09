@@ -8,15 +8,15 @@ import java.util.Map;
 
 public class FileOps {
 
-    public static void remove(String dir) {
+    public static boolean remove(String dir) {
         File f = new File(dir);
         if (f.isDirectory()) {
             if (!dir.endsWith("/")) dir += "/";
             for (String s : f.list())
-                remove(dir + s);
-            f.delete();
+                if (!remove(dir + s)) return false;
+            return f.delete();
         } else {
-            f.delete();
+            return f.delete();
         }
     }
 
@@ -198,6 +198,22 @@ public class FileOps {
             fout.close();
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+    }
+
+    public static boolean move(String source, String target) {
+        File s = new File(source);
+        if (!s.exists()) {
+            System.err.println("Source File does not Exist!");
+            return true;
+        }
+        if (!s.isDirectory()) {
+            return s.renameTo(new File(target));
+        } else {
+            createDir(target);
+            for (String subfile : s.list())
+                if (!move(source + File.separator + subfile, target + File.separator + subfile)) return false;
+            return remove(source);
         }
     }
 }

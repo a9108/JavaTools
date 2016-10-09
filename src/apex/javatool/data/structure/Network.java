@@ -5,10 +5,7 @@ import apex.javatool.io.FileOps;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Network extends Describable {
@@ -26,6 +23,8 @@ public class Network extends Describable {
         for (int i : netB.getNodes())
             for (int j : netB.getLinks(i))
                 insert(i, j);
+        this.id2name = new HashMap<>(netB.id2name);
+        this.name2id = new HashMap<>(netB.name2id);
     }
 
     public Network(int N) {
@@ -59,8 +58,11 @@ public class Network extends Describable {
                 nlinks.get(rid.get(i)).add(rid.get(j));
         links = nlinks;
         HashMap<Integer, String> nname = new HashMap<>();
-        for (int i : id2name.keySet())
+        name2id.clear();
+        for (int i : id2name.keySet()) {
             nname.put(rid.get(i), id2name.get(i));
+            name2id.put(id2name.get(i), rid.get(i));
+        }
         id2name = nname;
         return rid;
     }
@@ -92,6 +94,8 @@ public class Network extends Describable {
         int sum = 0;
         for (HashSet<Integer> cur : links.values())
             sum += cur.size();
+        for (int i : getNodes())
+            if (hasLink(i, i)) sum++;
         return sum / 2;
     }
 
@@ -115,11 +119,28 @@ public class Network extends Describable {
         return maxDegree;
     }
 
-    public HashMap<Integer,Integer> calcDistance(int source){
-        HashMap<Integer,Integer> res=new HashMap<>();
+    public List<Tuple<Integer, Integer>> calcDistanceList(int source) {
+        ArrayList<Tuple<Integer, Integer>> result = new ArrayList<>();
+        HashSet<Integer> visited = new HashSet<>();
+        result.add(new Tuple<>(source, 0));
+        visited.add(source);
+        for (int cur = 0; cur < result.size(); cur++) {
+            int id = result.get(cur).getFirst();
+            int dist = result.get(cur).getSecond() + 1;
+            getLinks(id).stream().filter(to -> !visited.contains(to)).forEach(to -> {
+                visited.add(to);
+                result.add(new Tuple<>(to, dist));
+            });
+        }
+        return result;
+    }
 
+    public HashMap<Integer, Integer> calcDistance(int source) {
+        HashMap<Integer, Integer> res = new HashMap<>();
+        calcDistanceList(source).forEach(t -> res.put(t.getFirst(), t.getSecond()));
         return res;
     }
+
     public Set<Integer> getNodes() {
         return links.keySet();
     }
@@ -217,7 +238,7 @@ public class Network extends Describable {
         for (int i : getNodes())
             out.addAll(
                     getLinks(i).stream()
-                            .filter(j -> i < j)
+                            .filter(j -> i <= j)
                             .map(j -> "" + (i + 1) + " " + (j + 1) + " 0 |{}|")
                             .collect(Collectors.toList()));
         FileOps.SaveList(filename, out);
@@ -240,5 +261,25 @@ public class Network extends Describable {
         if (links.containsKey(i) && links.get(i).contains(j))
             return true;
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int offset = 59281;
+        int adder = 109351;
+        int code = 1;
+        for (int i : getNodes()) {
+            code *= (i + offset);
+            code += adder;
+            for (int j : getLinks(i)) {
+                code *= j + offset;
+                code += adder;
+            }
+        }
+        return code;
+    }
+
+    public String getHashName() {
+        return size() + "-" + getEdgeCount() + "-" + hashCode();
     }
 }

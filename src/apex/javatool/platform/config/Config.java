@@ -64,4 +64,8 @@ public class Config {
 	public static boolean getBoolean(String name) {
 		return getString(name).toLowerCase().equals("true");
 	}
+
+	public static boolean verbose(){
+		return getBoolean("Verbose");
+	}
 }

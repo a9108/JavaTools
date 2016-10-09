@@ -41,7 +41,7 @@ public class Network extends Describable {
         return id2name.get(i);
     }
 
-    public int getNameID(String name) {
+    public int getNodeID(String name) {
         if (!name2id.containsKey(name)) return -1;
         return name2id.get(name);
     }
@@ -254,7 +254,7 @@ public class Network extends Describable {
     @Override
     public void describeContent() {
         show("# Nodes", getNodes().size());
-        show("# Edges", size());
+        show("# Edges", getEdgeCount());
     }
 
     public boolean hasLink(int i, int j) {

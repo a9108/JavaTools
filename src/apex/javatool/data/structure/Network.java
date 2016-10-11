@@ -228,12 +228,12 @@ public class Network extends Describable {
     public void saveLEDA(String filename, int type) {
         LinkedList<String> out = new LinkedList<>();
         out.add("LEDA.GRAPH");
-        out.add("void");
-        out.add("void");
+        out.add("string");
+        out.add("short");
         if (type == 3) out.add("-2");
         out.add("" + getNodes().size());
         for (int i = 0; i < getNodes().size(); i++)
-            out.add("|{" + (i + 1) + "}|");
+            out.add("|{" + getNodeName(i) + "}|");
         out.add("" + getEdgeCount());
         for (int i : getNodes())
             out.addAll(
@@ -281,5 +281,17 @@ public class Network extends Describable {
 
     public String getHashName() {
         return size() + "-" + getEdgeCount() + "-" + hashCode();
+    }
+
+    public void remove(int i, int j) {
+        if (!hasLink(i, j)) return;
+        links.get(i).remove(j);
+        links.get(j).remove(i);
+        altered = true;
+    }
+
+    public void removeSelfLoop() {
+        for (int i : getNodes())
+            remove(i, i);
     }
 }

@@ -103,4 +103,9 @@ public class LibSVM extends Classifier {
         System.out.println(model.predict(new SparseFeature(1)));
         model.destroy();
     }
+
+    @Override
+    public void describeContent() {
+
+    }
 }

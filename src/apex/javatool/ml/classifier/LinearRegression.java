@@ -90,9 +90,6 @@ public class LinearRegression extends Classifier {
                 rate /= 2;
             }
         }
-        System.out.println(bias);
-        for (int i = 0; i < NFeature; i++)
-            System.out.println(w[i]);
     }
 
     @Override
@@ -133,4 +130,10 @@ public class LinearRegression extends Classifier {
         rate = initRate;
     }
 
+    @Override
+    public void describeContent() {
+        show("Bias",bias);
+        for (int i = 0; i < NFeature; i++)
+            show("Weight #"+i,w[i]);
+    }
 }

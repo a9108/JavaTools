@@ -3,13 +3,15 @@ package apex.javatool.ml.classifier;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
+import apex.javatool.console.gui.Describable;
 import apex.javatool.data.structure.DenseFeature;
 import apex.javatool.data.structure.Feature;
 import apex.javatool.data.structure.SparseFeature;
 import apex.javatool.data.structure.Tuple;
 
-public abstract class Classifier {
+public abstract class Classifier extends Describable {
 	protected ArrayList<Tuple<Integer, Feature>> train = new ArrayList<Tuple<Integer, Feature>>();
 	protected int NFeature;
 

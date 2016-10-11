@@ -1,6 +1,7 @@
 package apex.javatool.data.structure;
 
 import java.util.HashSet;
+import java.util.List;
 
 public class DenseFeature extends Feature {
     private double[] value;
@@ -15,6 +16,12 @@ public class DenseFeature extends Feature {
         setSize(feature.size());
         for (int i = 0; i < nFeature; i++)
             value[i] = feature.getValue(i);
+    }
+
+    public DenseFeature(List<Double> values) {
+        setSize(values.size());
+        for (int i = 0; i < nFeature; i++)
+            value[i] = values.get(i);
     }
 
     public void setSize(int n) {
